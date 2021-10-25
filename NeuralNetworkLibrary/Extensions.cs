@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
-namespace NeuralNetwork
+namespace NeuralNetworkLibrary
 {
     public static class Extensions
     {

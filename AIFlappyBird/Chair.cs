@@ -1,9 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using NeuralNetwork;
+using NeuralNetworkLibrary;
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace AIFlappyBird
 {

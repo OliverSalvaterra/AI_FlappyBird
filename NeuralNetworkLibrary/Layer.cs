@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
-namespace AIFlappyBird
+namespace NeuralNetworkLibrary
 {
     public class Layer
     {

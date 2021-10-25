@@ -1,9 +1,6 @@
-﻿using NeuralNetwork;
-using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System;
 
-namespace AIFlappyBird
+namespace NeuralNetworkLibrary
 {
     public class ActivationFunction
     {
