@@ -8,6 +8,9 @@ namespace AIFlappyBird
     class Chair : Sprite
     {
         public bool destroy = false;
+        public int jumpStrength = 16;
+        private int imageHeight = 150;
+        private int scalar = 20;
 
         public Chair(Texture2D image, Vector2 position)
             : base(image, position) { }
@@ -15,37 +18,32 @@ namespace AIFlappyBird
         public Chair(Texture2D image, Vector2 position, Color tint)
             : base(image, position, tint) { }
 
-        public void destroyer()
+        public void Move()
         {
-            destroy = true;
+            X -= jumpStrength;
         }
 
-        public void move()
-        {
-            X -= 16;
-        }
-
-        public void resetPosition(float pos)
+        public void ResetPosition(float pos)
         {
             X = pos;
         }
 
-        public void init(GraphicsDevice g, bool top, Random rnd)
+        public void Init(GraphicsDevice graphics, bool top, Random rnd)
         {
-            rescale(rnd);
-            X = g.Viewport.Width;
+            Rescale(rnd);
+            X = graphics.Viewport.Width;
 
             if (top)
             {
-                Y = 0 - (int)scale.Y*20;
+                Y = 0 - (int)scale.Y*scalar;
             }
             else
             {
-                Y = g.Viewport.Height - (150 + (int)scale.Y*25);
+                Y = graphics.Viewport.Height - (imageHeight + (int)scale.Y*scalar);
             }
         }
 
-        public void rescale(Random rnd)
+        public void Rescale(Random rnd)
         {
             scale.Y = (float)rnd.NextDouble(0.8, 1.6);
         }

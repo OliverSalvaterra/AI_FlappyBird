@@ -15,7 +15,7 @@ namespace AIFlappyBird
         public Child(Texture2D image, Vector2 position, Color tint)
             : base(image, position, tint) { }
 
-        public void init()
+        public void Init()
         {
             X = 250;
             Y = 200;
@@ -24,29 +24,29 @@ namespace AIFlappyBird
             acceleration = .3f;
         }
         
-        public void unAlive()
+        public void UnAlive()
         {
             unAlived = true;
         }
 
-        public void reAlive()
+        public void ReAlive()
         {
             unAlived = false;
         }
 
-        public void verticalMovement()
+        public void VerticalMovement()
         {
             velocity += acceleration;
         }
 
-        public void jump()
+        public void Jump()
         {
             velocity = -5;
         }
 
-        public void move()
+        public void Move()
         {
-            verticalMovement();
+            VerticalMovement();
             Y += velocity;
         }
     }
