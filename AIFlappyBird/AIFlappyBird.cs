@@ -24,11 +24,9 @@ namespace AIFlappyBird
             fitnessTimer.Restart();
             foreach(Child c in children)
             {
-                c.Init();
+                c.Init(GraphicsDevice);
             }
-            chairSpawn = 3000;
             chairSpacing = 1000;
-
             
             topChairs.Clear();
             bottomChairs.Clear();
@@ -50,8 +48,6 @@ namespace AIFlappyBird
         Child[] children = new Child[batchSize];
         Queue<Chair> topChairs = new Queue<Chair>();
         Queue<Chair> bottomChairs = new Queue<Chair>();
-        double chairSpawn = 3000;
-        int frames = 0;
         int chairSpacing = 1000;
         double mutationRate = 0.1;
 
@@ -62,12 +58,14 @@ namespace AIFlappyBird
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
             IsMouseVisible = true;
+
+            graphics.PreferredBackBufferWidth = 1800;
+            graphics.PreferredBackBufferHeight = 450;
+            graphics.ApplyChanges();
         }
 
         protected override void Initialize()
         {
-            // TODO: Add your initialization logic here
-
             base.Initialize();
         }
 
@@ -87,36 +85,33 @@ namespace AIFlappyBird
             for(int i = 0; i < children.Length; i++)
             {
                 children[i] = new Child(Content.Load<Texture2D>("child"), Vector2.Zero);
-                children[i].Init();
+                children[i].Init(GraphicsDevice);
             }
         }
 
         protected override void Update(GameTime gameTime)
         {
             var keyboardState = Keyboard.GetState();
-            frames++;
 
             Chair topChair = topChairs.Peek();
-            //topChair.init(GraphicsDevice, true, rnd);
             Chair bottomChair = bottomChairs.Peek();
-            //bottomChair.init(GraphicsDevice, false, rnd);
 
-            if (watch.ElapsedMilliseconds >= chairSpawn && topChairs.Count < 7)
+            if (topChairs.Count < 7)
             {
                 watch.Restart();
                 float pos = topChairs.Last().Position.X + chairSpacing;
 
-                Chair t = new Chair(Content.Load<Texture2D>("highChair"), Vector2.Zero) { SpriteEffect = SpriteEffects.FlipVertically };
-                t.Init(GraphicsDevice, true, rnd);
-                t.ResetPosition(pos);
-                Chair b = new Chair(Content.Load<Texture2D>("highChair"), Vector2.Zero);
-                b.Init(GraphicsDevice, false, rnd);
-                b.ResetPosition(pos);
+                Chair top = new Chair(Content.Load<Texture2D>("highChair"), Vector2.Zero) { SpriteEffect = SpriteEffects.FlipVertically };
+                top.Init(GraphicsDevice, true, rnd);
+                top.ResetPosition(pos);
+                Chair bottom = new Chair(Content.Load<Texture2D>("highChair"), Vector2.Zero);
+                bottom.Init(GraphicsDevice, false, rnd);
+                bottom.ResetPosition(pos);
 
                 chairSpacing -= chairSpacing < 300 ? 0 : 50;  
 
-                topChairs.Enqueue(t);
-                bottomChairs.Enqueue(b);
+                topChairs.Enqueue(top);
+                bottomChairs.Enqueue(bottom);
             }
             if (topChair.HitBox.Right < 0)
             {
@@ -159,16 +154,16 @@ namespace AIFlappyBird
                     children[i].Jump();
                 }
 
-                foreach (Chair t in topChairs)
+                foreach (Chair tChair in topChairs)
                 {
-                    if (children[i].HitBox.Intersects(t.HitBox))
+                    if (children[i].HitBox.Intersects(tChair.HitBox))
                     {
                         children[i].UnAlive();
                     }
                 }
-                foreach (Chair b in bottomChairs)
+                foreach (Chair bChair in bottomChairs)
                 {
-                    if (children[i].HitBox.Intersects(b.HitBox))
+                    if (children[i].HitBox.Intersects(bChair.HitBox))
                     {
                         children[i].UnAlive();
                     }
@@ -195,16 +190,14 @@ namespace AIFlappyBird
             }
             unAlivedCount = 0;
 
-            foreach(Chair t in topChairs)
+            foreach(Chair moveTop in topChairs)
             {
-                t.Move();
+                moveTop.Move();
             }
-            foreach(Chair b in bottomChairs)
+            foreach(Chair moveBottom in bottomChairs)
             {
-                b.Move();
+                moveBottom.Move();
             }
-
-            //Window.Title = topChairs.Count.ToString();
 
             base.Update(gameTime);
         }
@@ -214,21 +207,21 @@ namespace AIFlappyBird
             GraphicsDevice.Clear(Color.CornflowerBlue);
             spriteBatch.Begin();
 
-            foreach(Child c in children)
+            foreach(Child childToDraw in children)
             {
-                if (!c.unAlived)
+                if (!childToDraw.unAlived)
                 {
-                    c.Draw(spriteBatch);
+                    childToDraw.Draw(spriteBatch);
                 }
             }
 
-            foreach (Chair b in bottomChairs)
+            foreach (Chair bottomChairToDraw in bottomChairs)
             {
-                b.Draw(spriteBatch);
+                bottomChairToDraw.Draw(spriteBatch);
             }
-            foreach (Chair t in topChairs)
+            foreach (Chair topChairToDraw in topChairs)
             {
-                t.Draw(spriteBatch);
+                topChairToDraw.Draw(spriteBatch);
             }
             
             spriteBatch.End();

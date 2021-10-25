@@ -8,7 +8,7 @@ namespace AIFlappyBird
     class Chair : Sprite
     {
         public bool destroy = false;
-        public int jumpStrength = 16;
+        public int moveSpeed = 16;
         private int imageHeight = 150;
         private int scalar = 20;
 
@@ -20,7 +20,7 @@ namespace AIFlappyBird
 
         public void Move()
         {
-            X -= jumpStrength;
+            X -= moveSpeed; // chair moves accross screen at moveSpeed per frame
         }
 
         public void ResetPosition(float pos)

@@ -10,7 +10,7 @@ namespace AIFlappyBird
         public Vector2 Position => position;
         public Color Tint { get; set; }
         public SpriteEffects SpriteEffect { get; set; } = SpriteEffects.None;
-        public float Rotation { get; set; } = 0f;
+        public float Rotation { get; set; } = 0f; // initializes rotation at 0
         public Vector2 Origin { get; set; } = Vector2.Zero;
 
         protected Vector2 scale = Vector2.One;
