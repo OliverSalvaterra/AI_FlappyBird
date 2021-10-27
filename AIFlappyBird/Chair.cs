@@ -30,22 +30,24 @@ namespace AIFlappyBird
 
         public void Init(GraphicsDevice graphics, bool top, Random rnd)
         {
-            Rescale(rnd);
+            Rescale(rnd, graphics);
             X = graphics.Viewport.Width;
+            float screenScale = graphics.Viewport.Height / 400;
 
             if (top)
             {
-                Y = 0 - (int)scale.Y*scalar;
+                Y = 0 - 1.05f*(int)scale.Y*scalar*screenScale;
             }
             else
             {
-                Y = graphics.Viewport.Height - (imageHeight + (int)scale.Y*scalar);
+                Y = graphics.Viewport.Height - 1.3f*(imageHeight + (int)scale.Y*scalar*screenScale);
             }
         }
 
-        public void Rescale(Random rnd)
+        public void Rescale(Random rnd, GraphicsDevice graphics)
         {
-            scale.Y = (float)rnd.NextDouble(0.8, 1.6);
+            scale.Y = (float)rnd.NextDouble(0.8, 1.6) * (graphics.Viewport.Height / 380);
+            scale.X = graphics.Viewport.Width / 800;
         }
     }
 }

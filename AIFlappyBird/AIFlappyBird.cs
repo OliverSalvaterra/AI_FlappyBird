@@ -53,6 +53,8 @@ namespace AIFlappyBird
 
         Stopwatch watch = new Stopwatch();
         Stopwatch fitnessTimer = new Stopwatch();
+        int minChairSpacing = 350;
+
         public AIFlappyBird()
         {
             graphics = new GraphicsDeviceManager(this);
@@ -60,7 +62,7 @@ namespace AIFlappyBird
             IsMouseVisible = true;
 
             graphics.PreferredBackBufferWidth = 1800;
-            graphics.PreferredBackBufferHeight = 450;
+            graphics.PreferredBackBufferHeight = 800;
             graphics.ApplyChanges();
         }
 
@@ -108,7 +110,7 @@ namespace AIFlappyBird
                 bottom.Init(GraphicsDevice, false, rnd);
                 bottom.ResetPosition(pos);
 
-                chairSpacing -= chairSpacing < 300 ? 0 : 50;  
+                chairSpacing -= chairSpacing < minChairSpacing ? 0 : 50;  
 
                 topChairs.Enqueue(top);
                 bottomChairs.Enqueue(bottom);
@@ -118,13 +120,13 @@ namespace AIFlappyBird
                 float pos = topChairs.Last().Position.X + chairSpacing;
                 topChair.ResetPosition(pos);
                 bottomChair.ResetPosition(pos);
-                chairSpacing -= chairSpacing < 300 ? 0 : 50;
+                chairSpacing -= chairSpacing < minChairSpacing ? 0 : 50;
 
                 topChairs.Dequeue();
-                topChair.Rescale(rnd);
+                topChair.Rescale(rnd, GraphicsDevice);
                 topChairs.Enqueue(topChair);
                 bottomChairs.Dequeue();
-                bottomChair.Rescale(rnd);
+                bottomChair.Rescale(rnd, GraphicsDevice);
                 bottomChairs.Enqueue(bottomChair);
             }
 
@@ -133,7 +135,7 @@ namespace AIFlappyBird
                 Exit();
             }
 
-            Vector2 chairMidpoint = new Vector2(topChair.HitBox.Center.X, (topChair.HitBox.Center.Y + bottomChair.HitBox.Center.Y) / 2);
+            Vector2 chairMidpoint = children[0].Position.X <= topChair.HitBox.Center.X ? new Vector2(topChair.HitBox.Center.X, (topChair.HitBox.Center.Y + bottomChair.HitBox.Center.Y) / 2) : new Vector2(GraphicsDevice.Viewport.Width/2, GraphicsDevice.Viewport.Height/2);
 
             for(int i = 0; i < children.Length; i++)
             {
@@ -186,7 +188,7 @@ namespace AIFlappyBird
                 brains.Train(rnd, mutationRate);
 
                 generation++;
-                Window.Title = generation.ToString();
+                Window.Title = "Generation: " + generation.ToString();
             }
             unAlivedCount = 0;
 
